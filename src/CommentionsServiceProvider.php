@@ -56,16 +56,18 @@ class CommentionsServiceProvider extends PackageServiceProvider
         // Share component prefix with views for dynamic component names
         View::share('commentionsComponentPrefix', $prefix);
 
+        // Loaded on request: Filament prints every other registered asset on every page of every panel, including
+        // the panels that do not use comments. The comment components load them with `@assets` (`assets.blade.php`).
         FilamentAsset::register(
             [
-                Js::make('commentions-scripts', __DIR__ . '/../resources/dist/commentions.js')->module(),
+                Js::make('commentions-scripts', __DIR__ . '/../resources/dist/commentions.js')->module()->loadedOnRequest(),
             ],
             'kirschbaum-development/' . static::$name
         );
 
         FilamentAsset::register(
             [
-                Css::make('commentions', __DIR__ . '/../resources/dist/commentions.css'),
+                Css::make('commentions', __DIR__ . '/../resources/dist/commentions.css')->loadedOnRequest(),
             ],
             'kirschbaum-development/' . static::$name
         );

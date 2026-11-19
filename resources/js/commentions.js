@@ -16,7 +16,7 @@ const debounce = (func, wait) => {
     };
 };
 
-document.addEventListener('alpine:init', () => {
+const registerComponents = () => {
     Alpine.data('editor', (content, mentions, component, placeholder, editorCssClasses, componentAlias = null) => {
         let editor
 
@@ -84,4 +84,12 @@ document.addEventListener('alpine:init', () => {
             },
         }
     })
-})
+}
+
+// The script is loaded on request, by the page that shows comments. If that page appears after Alpine has started
+// (comments opened in a modal, or a Livewire update), `alpine:init` has already fired, so register at once.
+if (window.Alpine) {
+    registerComponents()
+} else {
+    document.addEventListener('alpine:init', registerComponents)
+}
